@@ -28,7 +28,9 @@ df = data.frame("C" = storeC, "kc" = storeK, "m" = storeM, "R" = storeR)
 df$m = as.factor(df$m)
 
 # Plot
-ggplot(subset(df, subset = kc == "1.25"), aes(C, R)) + geom_line(aes(colour = m), size = 0.5) + scale_y_continuous(limits = c(0,4))
+ggplot(subset(df, subset = kc == "1.25"), aes(C, R)) +
+    geom_line(aes(colour = m), size = 0.5) +
+    scale_y_continuous(limits = c(0,4))
 
 # Ankit Roy
 # 9th September 2021
