@@ -63,7 +63,7 @@ anisotropy_plot = ggplot(anisotropy_df, aes(mw, r, colour = tau_ns)) +
 			   label.size = NA,
 			   show.legend = FALSE) +
 	labs(color = bquote("\u03c4 (ns)")) +
-	xlab("Molecular Weight (kDa)") +
+	xlab("Molecular Weight (Da)") +
 	ylab("r") +
 	ggtitle(bquote("Fluorescence anisotropy (r) as a function of molecular weight and fluorescence lifetime (\u03c4) at 22°C")) +
 	theme_bw() +
