@@ -6,7 +6,7 @@
 
 import sys
 import numpy as np
-from skimage import img_as_float, io
+from skimage import img_as_float, img_as_ubyte, io
 from skimage.restoration import denoise_nl_means, estimate_sigma
 
 # Read input image file
@@ -23,6 +23,14 @@ def denoiseImg(img):
 
     return denoise
 
+# Equalize histogram
+def runCLAHE(img):
+    img = img_as_ubyte(img)                 # convert image to unsigned 8 bit image
+    clahe = cv2.createCLAHE(clipLimit = np.max(img), tileGridSize = (4,4))  # create CLAHE kernel
+    equalized = clahe.apply(img)            # perform CLAHE
+
+    return equalized
+
 # Main function
 def main():
     px_bitsize = 16                         # pixel bit size
@@ -34,7 +42,8 @@ def main():
     # denoise every frame of timeseries
     for t in range(len(img)):
         denoise = denoiseImg(img[t])        # denoise frame
-        cleaned_img[t] = denoise            # store denoised frame
+        equalized = runCLAHE(denoise)
+        cleaned_img[t] = equalized          # store denoised frame
         print(f"Frame {t} processed")       # progress
     
     # output file name
