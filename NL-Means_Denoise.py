@@ -6,6 +6,7 @@
 
 import sys
 import numpy as np
+import cv2
 from skimage import img_as_float, img_as_ubyte, io
 from skimage.restoration import denoise_nl_means, estimate_sigma
 
