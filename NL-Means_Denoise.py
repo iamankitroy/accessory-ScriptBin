@@ -24,13 +24,16 @@ def denoiseImg(img):
 
     return denoise
 
-# Equalize histogram
-def runCLAHE(img):
-    img = img_as_ubyte(img)                 # convert image to unsigned 8 bit image
-    clahe = cv2.createCLAHE(clipLimit = np.max(img), tileGridSize = (4,4))  # create CLAHE kernel
-    equalized = clahe.apply(img)            # perform CLAHE
+# Progress bar
+def progress_bar(current, total, bar_length=20):
+    fraction = current/total
 
-    return equalized
+    arrow = int(fraction*bar_length-1) * '-' + '>'
+    padding = int(bar_length-len(arrow)) * ' '
+
+    ending = '\n' if current == total else '\r'
+
+    print(f'Progress: [{arrow}{padding}] {int(fraction*100)}% | Frame {current} of {total}', end=ending)
 
 # Main function
 def main():
@@ -43,9 +46,8 @@ def main():
     # denoise every frame of timeseries
     for t in range(len(img)):
         denoise = denoiseImg(img[t])        # denoise frame
-        equalized = runCLAHE(denoise)
-        cleaned_img[t] = equalized          # store denoised frame
-        print(f"Frame {t} processed")       # progress
+        cleaned_img[t] = denoise            # store denoised frame
+        progress_bar(t+1, len(img))         # print progress
     
     # output file name
     outname = f"{'.'.join(filename.split('.')[:-1])}_cleaned.tif"
@@ -55,3 +57,6 @@ main()
 
 # Ankit Roy
 # 22nd November, 2022
+# 23rd November, 2022
+#       -->     Removing CLAHE function
+#       -->     Adding progress bar
