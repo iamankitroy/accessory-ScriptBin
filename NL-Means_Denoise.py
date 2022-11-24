@@ -32,18 +32,11 @@ def denoiseImg(img, frame, patch_size=5, patch_distance=6):
 def main():
 
     px_bitsize = 16                         # pixel bit size
-    patch_size = 9
-    patch_distance = 6
+    patch_size = 9                          # patch size for NL-Means
+    patch_distance = 6                      # patch distance for NL-Means
 
     filename = sys.argv[1]                  # image file name
     img = readImg(filename)                 # read image data
-    cleaned_img = np.zeros(np.shape(img))   # store cleaned image
-
-    # # denoise every frame of timeseries
-    # for t in range(len(img)):
-    #     denoise = denoiseImg(img[t], 9, 6)  # denoise frame
-    #     cleaned_img[t] = denoise            # store denoised frame
-    #     progress_bar(t+1, len(img))         # print progress
     
     # store processes for parallelization
     processes = [(img[t], t, patch_size, patch_distance) for t in range(len(img))]
@@ -53,9 +46,10 @@ def main():
     results = pool.starmap(denoiseImg, processes)
     pool.close
 
+    # denoised image
     cleaned_img = np.array(results)
     
-    # output file name
+    # save output file
     outname = f"{'.'.join(filename.split('.')[:-1])}_cleaned_v2.tif"
     io.imsave(outname, np.uint16(cleaned_img * (2**px_bitsize - 1)))
 
