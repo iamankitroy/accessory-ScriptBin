@@ -51,7 +51,7 @@ def main():
     
     # save output file
     outname = f"{'.'.join(filename.split('.')[:-1])}_cleaned.tif"
-    io.imsave(outname, np.uint16(cleaned_img * (2**px_bitsize - 1)))
+    io.imsave(outname, np.uint16(cleaned_img * (2**px_bitsize - 1)), check_contrast=False)
 
 # Run main
 if __name__ == '__main__':
@@ -65,3 +65,4 @@ if __name__ == '__main__':
 # 24th November, 2022
 #       -->     Now runs parallel. Each frame is processed by a different CPU.
 #       -->     Removed progress bar, instead reported frames denoised.
+#       -->     Now does not check contrast while saving TIF files.
